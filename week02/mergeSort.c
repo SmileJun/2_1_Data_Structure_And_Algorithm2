@@ -20,6 +20,7 @@ void mergeSort(int *arr, int begin, int last);
 int isSorted(int *arr, int length);
 int isValidateCase(int *arr, int length);
 void validateAllCases();
+void printArr(int *arr, int length);
 
 int main(void)
 {
@@ -113,6 +114,10 @@ int isValidateCase(int *arr, int length)
         return FALSE;
 
     mergeSort(arr, 0, length - 1);
+    
+    printf("sorted array : ");
+    printArr(arr, length);
+
     if (isSorted(arr, length))
         return TRUE;
     else
@@ -142,4 +147,12 @@ void validateAllCases(void)
     assert(isValidateCase(specialCaseArr2, 10));
     assert(isValidateCase(specialCaseArr3, 10));
     assert(isValidateCase(specialCaseArr4, 10));
+}
+
+void printArr(int *arr, int length)
+{
+    int i;
+    for (i = 0; i < length; ++i)
+        printf("%d ", arr[i]);
+    printf("\n");
 }
