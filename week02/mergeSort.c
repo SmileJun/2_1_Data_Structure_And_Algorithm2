@@ -11,11 +11,14 @@
 #include <stdlib.h>
 #include <assert.h>
 
+#define TRUE 1
+#define FALSE 0
+
 int getMaxValue(int *arr, int begin, int last);
-void merge(int *arr, int *bufferArr, int firstBegin, int firstLast, int secondLast);
-void mergeSort(int *arr, int *bufferArr, int begin, int last);
-void isSorted(int *arr, int length);
-int isValidateCase(int *arr, int *bufferArr, int length);
+void merge(int *arr, int begin, int last);
+void mergeSort(int *arr, int begin, int last);
+int isSorted(int *arr, int length);
+int isValidateCase(int *arr, int length);
 void validateAllCases();
 
 int main(void)
@@ -26,52 +29,73 @@ int main(void)
 
 int getMaxValue(int *arr, int begin, int last)
 {
-    int i = 0;
-    int max = arr[i];
-    for (i = begin; i < last - 1; ++i) 
+    if (arr == NULL)
+        return -1;
+
+    int i;
+    int max = arr[begin];
+    for (i = begin; i <= last; ++i) 
     {
-        if (arr[i] < arr[i + 1])
-            max = arr[i + 1];
+        if (max < arr[i])
+            max = arr[i];
     }
     return max;
 }
 
-void merge(int *arr, int *bufferArr, int begin, int last)
+void merge(int *arr, int begin, int last)
 {
+    if (arr == NULL)
+        return;
+
     int i, j, k;
     int middle = begin + (last - begin) / 2;
     int numOfLeftElement = middle - begin + 1;
-    int numOfRigitElement = last - middle;
+    int numOfRightElement = last - middle;
 
-    int leftArr[numOfLeftElement + 1] = {0};
-    int rigintArr[numOfRightElement + 1] = {0};
+    int *leftArr = (int *)malloc((numOfLeftElement + 1) * sizeof(int));
+    int *rightArr = (int *)malloc((numOfRightElement + 1) * sizeof(int));
     int dummyValue = getMaxValue(arr, begin, last) + 1;
 
-    for (i = 0; i <= numOfLeftElement; ++i)
-        leftArr[i] = arr[i];
-    for (j = 0; j <= numOfRightElement; ++j)
-        rightArr[j] = arr[numOfLeftElement + j];
+    for (i = 0; i < numOfLeftElement; ++i)
+        leftArr[i] = arr[begin + i];
+    for (i = 0; i < numOfRightElement; ++i)
+        rightArr[i] = arr[numOfLeftElement + begin + i];
     leftArr[numOfLeftElement] = dummyValue;
-    rigitArr[numOfRightElement] = dummyValue;
+    rightArr[numOfRightElement] = dummyValue;
 
     i = 0; j = 0; k = begin;
-    while (k < last)
+    while (k <= last)
     {
         if (leftArr[i] <= rightArr[j])
-            bufferArr[k++] = leftArr[i++];
+            arr[k++] = leftArr[i++];
         else
-            bufferArr[k++] = rightArr[j++];
+            arr[k++] = rightArr[j++];
     }
+
+    free(leftArr);
+    free(rightArr);
 }
 
-void mergeSort(int *arr, int *bufferArr, int begin, int last)
+void mergeSort(int *arr, int begin, int last)
 {
-    
+    if (arr == NULL)
+        return;
+
+    if (last <= begin)
+        return;
+
+    int middle = begin + (last - begin) / 2;
+    mergeSort(arr, begin, middle);
+    mergeSort(arr, middle + 1, last);
+    merge(arr, begin, last);
 }
 
 
 int isSorted(int *arr, int length)
 {
+    if (arr == NULL)
+        return -1;
+
     int i;
     for (i = 0; i < length - 1; i++)
     {
@@ -85,7 +109,10 @@ int isSorted(int *arr, int length)
 
 int isValidateCase(int *arr, int length)
 {
-    // sort
+    if (arr == NULL)
+        return FALSE;
+
+    mergeSort(arr, 0, length - 1);
     if (isSorted(arr, length))
         return TRUE;
     else
@@ -106,15 +133,13 @@ void validateAllCases(void)
     int specialCaseArr3[10] = {15,1,6,3,7,8,3,2,3,4}; // random number
     int specialCaseArr4[10] = {4,5,6,6,5,4,4,7,1,10}; // have same value
    
-    int bufferArr[20] = {0};
+    assert(isValidateCase(numCaseArr1, 0));
+    assert(isValidateCase(numCaseArr2, 1));
+    assert(isValidateCase(numCaseArr3, 2));
+    assert(isValidateCase(numCaseArr4, 20));
 
-    assere(isValidateCase(numCaseArr1, bufferArr, 0));
-    assert(isValidateCase(numCaseArr2, bufferArr, 1));
-    assert(isValidateCase(numCaseArr3, bufferArr, 2));
-    assert(isValidateCase(numCaseArr4, bufferArr, 20));
-
-    assert(isValidateCase(specialCaseArr1, bufferArr, 10));
-    assert(isValidateCase(specialCaseArr2, bufferArr, 10));
-    assert(isValidateCase(specialCaseArr3, bufferArr, 10));
-    assert(isValidateCase(specialCaseArr4, bufferArr, 10));
+    assert(isValidateCase(specialCaseArr1, 10));
+    assert(isValidateCase(specialCaseArr2, 10));
+    assert(isValidateCase(specialCaseArr3, 10));
+    assert(isValidateCase(specialCaseArr4, 10));
 }
