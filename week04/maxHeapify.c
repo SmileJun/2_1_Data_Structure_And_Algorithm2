@@ -13,7 +13,7 @@
 
 #define TRUE 1
 #define FALSE 0
-#define HEAP_SIZE 10 
+#define HEAP_SIZE 11 
 #define HEAP_ELEMENT_SIZE (HEAP_SIZE + 1) // +1 for dummy node element[0] 
 #define randomize() srand((unsigned)time(NULL))
 #define MAX_VALUE 20
@@ -44,11 +44,21 @@ void testHeapify(void)
     heap_t * heap = makeSampleHeap();
    
     // test
-    printf("maxHeapify() 호출 전 : ");
+    printf("maxHeapify 호출 전 : ");
     printHeap(heap);
-    printf("maxHeapify() 호출 후 : ");
+    if (isMaxHeap(heap, 1))
+        printf("maxHeap이 맞습니다.\n");
+    else
+        printf("maxHeap이 아닙니다.\n");
+
     maxHeapify(heap, 1);
+
+    printf("maxHeapify 호출 후 : ");
     printHeap(heap);
+    if (isMaxHeap(heap, 1))
+        printf("maxHeap이 맞습니다.\n");
+    else
+        printf("maxHeap이 아닙니다.\n");
 
     // termination
     free(heap->element);
@@ -63,23 +73,57 @@ void maxHeapify(heap_t *heap, int pos)
         return;
     }
 
-    int posValue = heap->element[pos];
-    int leftValue = heap->element[pos * 2];
-    int rightValue = heap->element[pos * 2 + 1];
-
+    int leftChildPos = 2 * pos;
+    int rightChildPos = 2 * pos + 1;
+    int leftChildValue = heap->element[leftChildPos];
+    int rightChildValue = heap->element[rightChildPos];
+    int maxPos = 0;
     
+    if (heap->size >= leftChildPos && leftChildValue > heap->element[pos])
+        maxPos = leftChildPos;
+    else
+        maxPos = pos;
+        
+    if (heap->size >= rightChildPos && rightChildValue > heap->element[maxPos])
+        maxPos = rightChildPos;
+
+    if (maxPos != pos)
+    {
+        int temp = heap->element[pos];
+        heap->element[pos] = heap->element[maxPos];
+        heap->element[maxPos] = temp;
+        
+        maxHeapify(heap, maxPos);
+    }
 }
 
 heap_t * makeSampleHeap(void)
 {
     heap_t * heap = (heap_t *)malloc(sizeof(heap_t) * 1); 
-    heap->size = HEAP_SIZE;
+    heap->size = HEAP_SIZE; 
     heap->element = (int *)malloc(sizeof(int) * HEAP_ELEMENT_SIZE); 
     
-    int i;
-    for (i = 1; i < HEAP_ELEMENT_SIZE; ++i)
-        heap->element[i] = rand() % MAX_VALUE; 
+    if (heap == NULL || heap->element == NULL)
+    {
+        perror("malloc() error");
+        return NULL;
+    }
 
+    // new root
+    heap->element[1] = 4; 
+
+    // subtree들은 maxHeap이다.
+    heap->element[2] = 16;
+    heap->element[3] = 10;
+    heap->element[4] = 14;
+    heap->element[5] = 7;
+    heap->element[6] = 9;
+    heap->element[7] = 3;
+    heap->element[8] = 2;
+    heap->element[9] = 8;
+    heap->element[10] = 1;
+    heap->element[11] = 2;
+    
     return heap;
 }
 
@@ -117,7 +161,7 @@ void printHeap(heap_t *heap)
         return;
     }
 
-    int i;
+    int i = 0;
     for (i = 1; i <= heap->size; ++i)
     {
         printf("%d, ", heap->element[i]); 
