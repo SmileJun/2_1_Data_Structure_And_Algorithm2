@@ -138,8 +138,10 @@ int isMaxHeap(heap_t *heap, int pos)
     int leftChildPos = 2 * pos;
     int rightChildPos = 2 * pos + 1;
 
+    // heap->size == leftChildPos : heap의 child가 왼쪽에만 있을 경우
+    // heap->size >= rightChildPos : heap의 child가 양쪽에 다 있을 경우
     // current pos check
-    if ((heap->size == leftChildPos) && (heap->element[leftChildPos] > heap->element[pos]))
+    if ((heap->size == leftChildPos) && (heap->element[leftChildPos] > heap->element[pos])) 
         return FALSE;
     if ((heap->size >= rightChildPos) && (heap->element[leftChildPos] > heap->element[pos] || heap->element[rightChildPos] > heap->element[pos]))
         return FALSE;
