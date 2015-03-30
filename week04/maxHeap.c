@@ -98,7 +98,7 @@ heap_t * makeRandomHeap(int heapSize)
 
 void maxHeapify(heap_t *heap, int pos)
 {
-    if (heap == NULL || heap->length <= 0 || heap->element == NULL || pos < 1)
+    if (heap == NULL || heap->length <= 0 || heap->element == NULL || pos < 1 || pos > heap->size)
     {
         perror("maxHeapify() invalid arguments");
         return;
@@ -261,7 +261,7 @@ void heapChangeKey(heap_t *heap, int i, int key)
 {
     if (heap == NULL || heap->length <= 0 || heap->element == NULL || i < 1 || i > heap->size)
     {
-        perror("heapIncreaseKey() invalid arguments");
+        perror("heapChangeKey() invalid arguments");
         return;
     }
     
