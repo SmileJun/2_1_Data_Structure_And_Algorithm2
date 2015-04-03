@@ -21,7 +21,7 @@ int partition(int *arr, int start, int end);
 void testPartition(int *arr, int partitionedIndex, int length);
 void testAllCases(void);
 void makeRandomArray(int *arr, int length);
-void printAllArrays(int **arr);
+void printAllArrays(int **arr); // test용 함수
 void printArray(int *arr, int length);
 
 int main(void)
@@ -150,6 +150,7 @@ void testAllCases(void)
     printf("==========================\n");
     partitionedIndex = partition(descendArray, 0, 9);
     testPartition(descendArray, partitionedIndex, 10);
+
     printf("\n");
 
     // termination
