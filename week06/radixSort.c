@@ -10,14 +10,16 @@
 #include <stdlib.h>
 #include <string.h>
 #include <errno.h>
+#include <time.h>
 #include <math.h>
 
-#define TRUE 1
-#define FALSE 0
+#define randomize() srand((unsigned)time(NULL))
 #define SIZE 7 
 #define DIGIT_NUM 3
+#define MAX_VALUE (int)(pow(10, DIGIT_NUM));
 #define NUMBER_SYSTEM 10 // 진법
 
+int * makeRandomArray(int size);
 void stableSort(int *arr, int size, int maxValue);
 void radixSort(int *arr, int size, int digitNum);
 void testRadixSort(void);
@@ -25,28 +27,28 @@ void printArray(int *arr, int size);
 
 int main(void)
 {
+    randomize();
     testRadixSort();
     return 0;
 }
 
-int getMaxValue(int *arr, int size)
+int * makeRandomArray(int size)
 {
-    if (arr == NULL || size < 0)
+    if (size < 0)
+        return NULL;
+
+    int * arr = (int *)calloc(size, sizeof *arr);
+    if (arr == NULL)
     {
-        fprintf(stderr, "%s\n", "getMaxValue() invalid arguments");
-        return -1;
-    }
-    
-    int max = arr[0];
-    int i = 0;
-   
-    for (i = 1; i < size; ++i)
-    {
-        if (max < arr[i])
-            max = arr[i];
+        fprintf(stderr, "%s\n", strerror(errno));
+        return NULL;
     }
 
-    return max;
+    int i = 0;
+    for (i = 0; i < size; ++i)
+        arr[i] = rand() % MAX_VALUE;
+
+    return arr;
 }
 
 void stableSort(int *arr, int size, int digitPos)
@@ -119,11 +121,13 @@ void radixSort(int *arr, int size, int digitNum)
 
 void testRadixSort(void)
 {
-    int randomArray[SIZE] = {329, 437, 657, 839, 436, 720, 355};
+    // init
+    int * randomArray = makeRandomArray(SIZE); 
     int ascendantArray[SIZE] = {111, 112, 123, 125, 172, 639, 981};
     int descendantArray[SIZE] = {981, 639, 172, 125, 123, 112, 111};
     int sameValueArray[SIZE] = {111, 111, 111, 111, 111, 111, 111};
 
+    // test
     printf("random case\n");
     printf("before : "); printArray(randomArray, SIZE);
     radixSort(randomArray, SIZE, DIGIT_NUM);
@@ -143,11 +147,19 @@ void testRadixSort(void)
     printf("before : "); printArray(sameValueArray, SIZE);
     radixSort(sameValueArray, SIZE, DIGIT_NUM);
     printf("after : "); printArray(sameValueArray, SIZE);
-   
+
+    // termination
+    free(randomArray);
 }
 
 void printArray(int *arr, int size)
 {
+    if (arr == NULL || size < 0)
+    {
+        fprintf(stderr, "%s\n", "printArray() invalid arguments");
+        return;
+    }
+
     int i = 0;
     for (i = 0; i < size; ++i)
         printf("%d ", arr[i]);

@@ -10,20 +10,42 @@
 #include <stdlib.h>
 #include <string.h>
 #include <errno.h>
+#include <time.h>
 
-#define TRUE 1
-#define FALSE 0
+#define randomize() srand((unsigned)time(NULL))
+#define MAX_VALUE 10
 #define SIZE 8 
 
+int * makeRandomArray(int size);
 int getMaxValue(int *arr, int size);
 void countingSort(int *arr, int size, int maxValue);
-void testCountingSort();
+void testCountingSort(void);
 void printArray(int *arr, int size);
 
 int main(void)
 {
+    randomize();
     testCountingSort();
     return 0;
+}
+
+int * makeRandomArray(int size)
+{
+    if (size < 0)
+        return NULL;
+
+    int * arr = (int *)calloc(size, sizeof *arr);
+    if (arr == NULL)
+    {
+        fprintf(stderr, "%s\n", strerror(errno));
+        return NULL;
+    }
+
+    int i = 0;
+    for (i = 0; i < size; ++i)
+        arr[i] = rand() % MAX_VALUE;
+
+    return arr;
 }
 
 int getMaxValue(int *arr, int size)
@@ -95,12 +117,14 @@ void countingSort(int *arr, int size, int maxValue)
 
 void testCountingSort()
 {
-    int randomArray[SIZE] = {1,8,3,4,6,8,2,16};
+    // init
+    int * randomArray = makeRandomArray(SIZE); 
     int ascendantArray[SIZE] = {1,2,3,4,5,6,7,8};
     int descendantArray[SIZE] = {8,7,6,5,4,3,2,1};
     int sameValueArray[SIZE] = {1,1,1,1,1,1,1,1};
     int maxValue = 0;
 
+    // test
     printf("random case\n");
     printf("before : "); printArray(randomArray, SIZE);
     maxValue = getMaxValue(randomArray, SIZE);
@@ -124,6 +148,9 @@ void testCountingSort()
     maxValue = getMaxValue(sameValueArray, SIZE);
     countingSort(sameValueArray, SIZE, maxValue);
     printf("after : "); printArray(sameValueArray, SIZE);
+
+    // termination
+    free(randomArray);
 }
 
 void printArray(int *arr, int size)
