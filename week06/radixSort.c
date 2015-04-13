@@ -20,7 +20,7 @@
 #define NUMBER_SYSTEM 10 // 진법
 
 int * makeRandomArray(int size);
-void stableSort(int *arr, int size, int digitPos);
+void countingSort(int *arr, int size, int digitPos);
 void radixSort(int *arr, int size, int digitNum);
 void testRadixSort(void);
 void printArray(int *arr, int size);
@@ -51,7 +51,7 @@ int * makeRandomArray(int size)
     return arr;
 }
 
-void stableSort(int *arr, int size, int digitPos)
+void countingSort(int *arr, int size, int digitPos)
 {
     if (arr == NULL || size < 0 || digitPos < 1)
     {
@@ -116,7 +116,7 @@ void radixSort(int *arr, int size, int digitNum)
 
     int digitPos = 0;
     for (digitPos = 1; digitPos <= digitNum; ++digitPos)
-        stableSort(arr, size, digitPos);
+        countingSort(arr, size, digitPos);
 }
 
 void testRadixSort(void)
