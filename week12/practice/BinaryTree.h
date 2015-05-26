@@ -11,13 +11,21 @@ typedef struct bTreeNode
 } BTreeNode;
 
 BTreeNode * makeBTreeNode(void);
-BTData getData(BTreeNode * bTreeNode);
-void setData(BTreeNode * bTreeNode, BTData data);
+BTData getData(BTreeNode * bTree);
+void setData(BTreeNode * bTree, BTData data);
 
-BTreeNode * getLeftSubTree(BTreeNode * bTreeNode);
-BTreeNode * getRightSubTree(BTreeNode * bTreeNode);
+BTreeNode * getLeftSubTree(BTreeNode * bTree);
+BTreeNode * getRightSubTree(BTreeNode * bTree);
 
-void MakeLeftSubTree(BTreeNode * main, BTreeNode * sub);
-void MAkeRightSubTree(BTreeNode * main, BTreeNode * sub);
+void makeLeftSubTree(BTreeNode * main, BTreeNode * sub);
+void makeRightSubTree(BTreeNode * main, BTreeNode * sub);
+
+typedef void visitFuctPtr(BTData data);
+
+void preOrderTraverse(BTreeNode * bTree, visitFuctPtr action);
+void inOrderTraverse(BTreeNode * bTree, visitFuctPtr action);
+void postOrderTraverse(BTreeNode * bTree, visitFuctPtr action);
+
+void deleteTree(BTreeNode * bTree);
 
 #endif
