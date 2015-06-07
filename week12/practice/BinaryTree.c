@@ -33,7 +33,7 @@ BTreeNode * getRightSubTree(BTreeNode * bTree)
 void makeLeftSubTree(BTreeNode * main, BTreeNode * sub)
 {
     if (main->left != NULL)
-        deleteTree(main->left);
+        free(main->left);
 
     main->left = sub;
 }
@@ -41,8 +41,42 @@ void makeLeftSubTree(BTreeNode * main, BTreeNode * sub)
 void makeRightSubTree(BTreeNode * main, BTreeNode * sub)
 {
     if (main->right != NULL)
-        deleteTree(main->right);
+        free(main->right);
 
+    main->right = sub;
+}
+
+BTreeNode * removeLeftSubTree(BTreeNode * bTree)
+{
+    BTreeNode * delNode;
+
+    if (bTree != NULL)
+    {
+        delNode = bTree->left;
+        bTree->left = NULL;
+    }
+    return delNode;
+}
+
+BTreeNode * removeRightSubTree(BTreeNode * bTree)
+{
+    BTreeNode * delNode;
+
+    if (bTree != NULL)
+    {
+        delNode = bTree->right;
+        bTree->right = NULL;
+    }
+    return delNode;
+}
+
+void changeLeftSubTree(BTreeNode * main, BTreeNode * sub)
+{
+    main->left = sub;
+}
+
+void changeRightSubTree(BtreeNode * main, BTreeNode * sub)
+{
     main->right = sub;
 }
 

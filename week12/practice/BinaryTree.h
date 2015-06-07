@@ -10,21 +10,29 @@ typedef struct bTreeNode
     struct bTreeNode * right;
 } BTreeNode;
 
+
 BTreeNode * makeBTreeNode(void);
+
+
 BTData getData(BTreeNode * bTree);
 void setData(BTreeNode * bTree, BTData data);
-
 BTreeNode * getLeftSubTree(BTreeNode * bTree);
 BTreeNode * getRightSubTree(BTreeNode * bTree);
 
+
 void makeLeftSubTree(BTreeNode * main, BTreeNode * sub);
 void makeRightSubTree(BTreeNode * main, BTreeNode * sub);
+BTreeNode * removeLeftSubTree(BTreeNode * bTree);
+BTreeNode * removeRightSubTree(BTreeNode * bTree);
+void changeLeftSubTree(BTreeNode * main, BTreeNode * sub);
+void changeRightSubTree(BtreeNode * main, BTreeNode * sub);
+
 
 typedef void visitFuctPtr(BTData data);
-
 void preOrderTraverse(BTreeNode * bTree, visitFuctPtr action);
 void inOrderTraverse(BTreeNode * bTree, visitFuctPtr action);
 void postOrderTraverse(BTreeNode * bTree, visitFuctPtr action);
+
 
 void deleteTree(BTreeNode * bTree);
 
